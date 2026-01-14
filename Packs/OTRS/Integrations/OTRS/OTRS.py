@@ -403,6 +403,7 @@ def create_ticket_command(client: Client, args: dict[str, str]):
     owner = args.get("owner")
     article_subject = args.get("article_subject")
     article_body = args.get("article_body")
+    contenttype = args.get("contenttype")
     ticket_type = args.get("type")
     dynamic_fields = args.get("dynamic_fields")
     attachment = args.get("attachment")
@@ -431,10 +432,11 @@ def create_ticket_command(client: Client, args: dict[str, str]):
             "CustomerUser": customer_user,
             "Type": ticket_type,
             "Owner": owner,
+            "ContentType": contenttype
         }
     )
 
-    article = Article({"Subject": article_subject, "Body": article_body})
+    article = Article({"Subject": article_subject, "Body": article_body,"ContentType": contenttype})
 
     ticket = client.create_ticket(new_ticket, article, df, attachments)
 
@@ -469,6 +471,7 @@ def update_ticket_command(client: Client, args: dict[str, str]):
     priority = args.get("priority")
     article_subject = args.get("article_subject")
     article_body = args.get("article_body")
+    contenttype = args.get("contenttype")
     ticket_type = args.get("type")
     dynamic_fields = args.get("dynamic_fields")
     attachment = args.get("attachment")
@@ -494,7 +497,7 @@ def update_ticket_command(client: Client, args: dict[str, str]):
     if (article_subject and article_body is None) or (article_subject is None and article_body):
         raise Exception("Both article subject and body are required in order to add article")
     elif article_subject and article_body:
-        article_obj = {"Subject": article_subject, "Body": article_body}
+        article_obj = {"Subject": article_subject, "Body": article_body, "ContentType": contenttype}
         article = Article(article_obj)
     else:
         article = None
@@ -559,9 +562,10 @@ def close_ticket_command(client: Client, args: dict[str, str]):
     ticket_id = args.get("ticket_id")
     article_subject = args.get("article_subject")
     article_body = args.get("article_body")
+    contenttype = args.get("contenttype")
     state = args.get("state", "closed successful")
 
-    article_object = {"Subject": article_subject, "Body": article_body}
+    article_object = {"Subject": article_subject, "Body": article_body, "ContentType": contenttype}
 
     article = Article(article_object)
 
